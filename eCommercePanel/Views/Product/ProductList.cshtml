@@ -1,0 +1,43 @@
+﻿@model List<eCommercePanel.DAL.DTOs.ProductDTOs.Responses.GetAllProductsDto>
+
+@{
+    ViewData["Title"] = "ProductList";
+}
+
+
+<h2>Ürün Listesi</h2>
+@if (!string.IsNullOrEmpty(ViewBag.Error as string))
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Ürün Adı</th>
+            <th>Açıklama</th>
+            <th>Fiyat</th>
+            <th>Stok</th>
+            <th>Görsel</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ProductName</td>
+                <td>@item.Description</td>
+                <td>@item.Price ₺</td>
+                <td>@item.Stock</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                    {
+                        <img src="@item.ImageUrl" width="100" />
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

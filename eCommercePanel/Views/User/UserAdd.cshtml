@@ -1,0 +1,40 @@
+﻿@model eCommercePanel.DAL.DTOs.UserDTOs.Requets.UserCreateDto;
+
+@{
+    ViewData["Title"] = "UserAdd";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<!-- Form Başlangıcı -->
+<form asp-action="UserAdd" method="post">
+    <div class="form-group">
+        <label for="FirstName">First Name</label>
+        <input type="text" class="form-control" id="FirstName" name="FirstName" value="@Model.FirstName" required />
+    </div>
+    <div class="form-group">
+        <label for="LastName">Last Name</label>
+        <input type="text" class="form-control" id="LastName" name="LastName" value="@Model.LastName" required />
+    </div>
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" required />
+    </div>
+    <div class="form-group">
+        <label for="Password">Password</label>
+        <input type="password" class="form-control" id="Password" name="Password" required />
+    </div>
+    <div class="form-group">
+        <label for="CreatedAt">Created At</label>
+        <input type="text" class="form-control" id="CreatedAt" name="CreatedAt" value="@Model.CreatedAt.ToString("yyyy-MM-dd")" disabled />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add User</button>
+</form>
+
+<!-- Hata mesajlarını gösterme -->
+@if (!string.IsNullOrEmpty(ViewBag.Error as string))
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+

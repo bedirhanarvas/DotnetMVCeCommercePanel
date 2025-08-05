@@ -1,0 +1,19 @@
+﻿@model eCommercePanel.DAL.DTOs.UserDTOs.Responses.UserDetailDto;
+
+@{
+    ViewData["Title"] = "Kullanıcı Detayı";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="user-details">
+    <p><strong>Ad:</strong> @Model.FirstName</p>
+    <p><strong>Soyad:</strong> @Model.LastName</p>
+    <p><strong>E-posta:</strong> @Model.Email</p>
+    <p><strong>Password:</strong> @Model.Password</p>
+</div>
+
+<a href="@Url.Action("UserDelete", "User", new { id = Model.Id })" class="btn btn-danger">Hesap Sil</a>
+
+<a href="@Url.Action("UserEdit", "User", new { id = Model.Id })" class="btn btn-success">Bilgileri Güncelle</a>
+
