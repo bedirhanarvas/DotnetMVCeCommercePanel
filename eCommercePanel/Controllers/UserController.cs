@@ -29,8 +29,11 @@ public class UserController : Controller
 
         return View(result.Data);
     }
-
-    
+    /// <summary>
+    /// bu endpoint ve fonksiyon kullancıı detayşatıı getirir
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpGet]
     public async Task<IActionResult> UserDetail(int id)
     {

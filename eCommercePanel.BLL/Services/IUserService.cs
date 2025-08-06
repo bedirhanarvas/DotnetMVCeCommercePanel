@@ -12,7 +12,16 @@ namespace eCommercePanel.BLL.Services;
 
 public interface IUserService
 {
+    /// <summary>
+    /// Tüm kullanıcıları getirir
+    /// </summary>
+    /// <returns></returns>
     Task<DataResult<List<UserDto>>> GetAllUsers();
+    /// <summary>
+    /// Email kıntrolğ yapılır
+    /// </summary>
+    /// <param name="email">kullanıcı maili girilmelidir.</param>
+    /// <returns></returns>
     Task<DataResult<UserDetailDto>> GetUserByEmail(string email);
     Task<DataResult<UserDetailDto>> GetByIdAsync(int id);
     Task<DataResult<UserDto>> LoginAsync(UserLoginDto dto);
