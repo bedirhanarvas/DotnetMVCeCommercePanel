@@ -13,7 +13,8 @@ namespace eCommercePanel.DAL.Interfaces
         Task<User> GetByIdAsync(int id);                    
         Task<User> GetByEmailAsync(string email);
         Task<User> GetByEmailAsync(string email,string password);
-        Task<bool> IsEmailExistsAsync(string email);        
+        Task<bool> IsEmailExistsAsync(string email);
+        IQueryable<User> GetQueryable();
         Task AddAsync(User user);                           
         void Update(User user);                            
         void Delete(User user);                             

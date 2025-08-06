@@ -1,9 +1,11 @@
 ﻿using eCommercePanel.BLL.Results;
 using eCommercePanel.BLL.Services;
+using eCommercePanel.DAL.DTOs.OrderDTOs.Responses;
 using eCommercePanel.DAL.DTOs.UserDTOs.Requets;
 using eCommercePanel.DAL.DTOs.UserDTOs.Responses;
 using eCommercePanel.DAL.Entities;
 using eCommercePanel.DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -65,6 +67,7 @@ public class UserManager : IUserService
 
         var userDto = users.Select(p => new UserDto
         {
+            Id = p.Id,
             FirstName = p.FirstName,
             LastName = p.LastName,
             Email = p.Email,            
@@ -170,4 +173,15 @@ public class UserManager : IUserService
         var hash = sha256.ComputeHash(bytes);
         return Convert.ToBase64String(hash);
     }
+
+    public async Task<List<UserOrderDetailDto>> GetOrdersByUserIdAsync(int userId)
+    {
+        var user = await _userRepository.GetByIdAsync(userId);
+
+
+   
+
+        return null;
+    }
+
 }

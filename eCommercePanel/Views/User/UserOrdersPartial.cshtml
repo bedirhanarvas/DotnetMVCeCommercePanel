@@ -1,0 +1,31 @@
+﻿@model List<eCommercePanel.DAL.DTOs.UserDTOs.Responses.UserOrderDetailDto>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Bu kullanıcıya ait sipariş bulunmamaktadır.</div>
+}
+else
+{
+    foreach (var order in Model)
+    {
+        <div class="card mb-3 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <strong>Sipariş #: </strong>@order.OrderId - @order.OrderDate.ToString("dd MMM yyyy HH:mm")
+                <span class="float-right">@order.TotalAmount ₺</span>
+            </div>
+            <div class="card-body">
+                <p><strong>Adres:</strong> @order.Address</p>
+                <ul class="list-group">
+                    @foreach (var item in order.Items)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @item.ProductName
+                            <span class="badge badge-primary badge-pill">@item.Quantity adet</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+}
+

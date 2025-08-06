@@ -8,10 +8,12 @@ namespace eCommercePanel.Controllers;
 public class UserController : Controller
 {
     private readonly IUserService _userService;
+    private readonly IReportService _reportService;
 
-    public UserController(IUserService userService)
+    public UserController(IUserService userService, IReportService reportService)
     {
         _userService = userService;
+        _reportService = reportService;
     }
 
     [HttpGet]
@@ -172,7 +174,7 @@ public class UserController : Controller
         //HttpContext.Session.SetString("Email", result.Data.Email);
         TempData["Welcome"] = $"Hoş geldin, {result.Data.FirstName}!";
 
-        return RedirectToAction("ProductList", "Product");
+        return RedirectToAction("Index", "Dashboard");
     }
 
     [HttpGet]
@@ -204,5 +206,12 @@ public class UserController : Controller
 
         TempData["Message"] = "Şifre sıfırlama bağlantısı gönderildi (simülasyon).";
         return RedirectToAction("Login");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetOrdersByUserId(int userId)
+    {
+        var orders = await _reportService.GetOrdersByUserIdAsync(userId);
+        return PartialView("UserOrdersPartial", orders);
     }
 }

@@ -41,5 +41,10 @@ namespace eCommercePanel.DAL.Repositories
         public async Task SaveAsync() => await _context.SaveChangesAsync();
 
         public async Task<User> GetByEmailAsync(string email, string password) => await _users.FirstOrDefaultAsync(x=> x.Email == email && x.Password == password);
+
+        public IQueryable<User> GetQueryable()
+        {
+            return _context.Set<User>().AsQueryable();
+        }
     }
 }

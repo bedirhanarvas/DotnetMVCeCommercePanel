@@ -1,0 +1,24 @@
+﻿@model List<eCommercePanel.DAL.DTOs.OrderDTOs.Responses.PreparingOrderDto>
+
+<h2 class="mb-4">Hazırlanması Gereken Siparişler</h2>
+
+@foreach (var order in Model)
+{
+    <div class="card mb-3">
+        <div class="card-header">
+            <strong>Sipariş ID:</strong> @order.Id
+        </div>
+        <div class="card-body">
+            <p><strong>Müşteri:</strong> @order.CustomerFullName</p>
+            <p><strong>Adres:</strong> @order.AddressLine, @order.City</p>
+            <p><strong>Ürünler:</strong></p>
+            <ul>
+                @foreach (var product in order.Products)
+                {
+                    <li class="list-group-item">@product.ProductName (@product.Quantity adet)</li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+}

@@ -23,9 +23,11 @@ public class DashboardController : Controller
         var mostExpensiveProduct = await _reportService.GetMostExpensiveProductAsync();
         var allProductsResult = await _productService.GetAllAsync();
         var allProducts = allProductsResult.Data;
+        var totalStock = allProducts.Sum(p => p.Stock ?? 0);
+        var preparingOrders = await _reportService.GetPreparingOrdersAsync();
+        var dailySales = await _reportService.GetDailySalesAsync(DateTime.Today.AddDays(-7), DateTime.Today);
 
-        var totalStock = allProducts.Sum(p => p.Stock ?? 0);  
-      
+
         var productDtos = allProducts.Select(p => new ProductDetailDto
         {
             ProductName = p.ProductName,
@@ -33,16 +35,27 @@ public class DashboardController : Controller
             StockPercentage = totalStock > 0 ? (p.Stock ?? 0) * 100 / totalStock : 0 
         }).ToList();
 
+        var soldProductsToday = await _reportService.GetSoldProductsCountTodayAsync();
+
         var viewModel = new DashboardViewModel
         {
             TopSellingProduct = topProduct,
             MostExpensiveProduct = mostExpensiveProduct,
-            AllProducts = productDtos
+            AllProducts = productDtos,
+            SoldProductsToday = soldProductsToday,
+            PreparingOrdersCount = preparingOrders.Count,
+            DailySales = dailySales
         };
 
         return View(viewModel);
     }
 
+    public async Task<IActionResult> PreparingOrders()
+    {
+        var orders = await _reportService.GetPreparingOrdersAsync();
+        return View(orders);
+    }
 
+   
 
 }
