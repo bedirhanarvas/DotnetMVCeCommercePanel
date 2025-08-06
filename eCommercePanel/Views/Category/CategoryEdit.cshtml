@@ -1,0 +1,24 @@
+﻿@model eCommercePanel.DAL.DTOs.CategoryDTOs.Requests.CategoryUpdateDto
+
+@{
+    ViewData["Title"] = "Kategori Düzenle";
+}
+
+<h2 class="mb-4">Kategori Düzenle</h2>
+
+<form asp-action="CategoryEdit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label for="CategoryName">Kategori Adı</label>
+        <input asp-for="CategoryName" class="form-control" />
+        <span asp-validation-for="CategoryName" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+    <a href="/Category/CategoryList" class="btn btn-secondary">İptal</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

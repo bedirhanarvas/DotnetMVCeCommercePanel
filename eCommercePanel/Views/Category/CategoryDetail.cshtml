@@ -1,0 +1,21 @@
+﻿@model eCommercePanel.DAL.DTOs.CategoryDTOs.Response.CategoryDetailDto
+
+@{
+    ViewData["Title"] = "Kategori Detayı";
+}
+
+<h2 class="mb-4">Kategori Detayı</h2>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Kategori ID</dt>
+            <dd class="col-sm-9">@Model.Id</dd>
+
+            <dt class="col-sm-3">Kategori Adı</dt>
+            <dd class="col-sm-9">@Model.CategoryName</dd>
+        </dl>
+    </div>
+</div>
+
+<a href="/Category/CategoryList" class="btn btn-secondary mt-3">Geri Dön</a>

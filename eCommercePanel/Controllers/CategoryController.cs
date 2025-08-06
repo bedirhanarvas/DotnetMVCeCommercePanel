@@ -71,11 +71,27 @@ public class CategoryController : Controller
     [HttpGet]
     public async Task<IActionResult> CategoryDelete(int id)
     {
+        var result = await _categoryService.GetByIdAsync(id);
+
+        if (!result.Success || result.Data == null)
+        {
+            TempData["Error"] = result.Message ?? "Kategori bulunamadı.";
+            return RedirectToAction("CategoryList");
+        }
+
+
+        return View(result.Data); // CategoryDetailDto gibi bir model dönmeli
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CategoryDeleteConfirmed(int id)
+    {
         var result = await _categoryService.DeleteAsync(id);
+
         if (!result.Success)
         {
-            TempData["Error"] = result.Message ??"Kategori bulunamadı.";
-            return RedirectToAction("CategoryList");
+            TempData["Error"] = result.Message ?? "Silme işlemi başarısız.";
         }
 
         return RedirectToAction("CategoryList");

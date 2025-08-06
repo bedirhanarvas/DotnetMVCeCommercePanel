@@ -24,6 +24,7 @@ public class CategoryManager : ICategoryService
 
         };
         await _categoryRepository.AddCategoryAsync(addCategory);
+        await _categoryRepository.SaveAsync();
 
         return new SuccessResult(addCategory + " başarıyla kaydedildi.");
     }
@@ -38,6 +39,7 @@ public class CategoryManager : ICategoryService
         }
 
         _categoryRepository.DeleteCategory(category);
+        await _categoryRepository.SaveAsync();
 
         return new SuccessResult("Başarıyla silindi.");
     }
@@ -66,6 +68,7 @@ public class CategoryManager : ICategoryService
 
         var dto = new CategoryDetailDto()
         {
+            Id=category.Id,
             CategoryName = category.CategoryName,
         };
 
@@ -92,6 +95,7 @@ public class CategoryManager : ICategoryService
         }
 
         _categoryRepository.Update(category);
+        await _categoryRepository.SaveAsync();
 
         return new SuccessResult("Başarıyla güncellendi.");
     }

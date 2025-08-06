@@ -1,0 +1,22 @@
+﻿@model eCommercePanel.DAL.DTOs.CategoryDTOs.Requests.CategoryCreateDto
+
+@{
+    ViewData["Title"] = "Yeni Kategori Ekle";
+}
+
+<h2 class="mb-4">Yeni Kategori Ekle</h2>
+
+<form asp-action="CategoryAdd" method="post">
+    <div class="form-group">
+        <label for="CategoryName">Kategori Adı</label>
+        <input asp-for="CategoryName" class="form-control" placeholder="Kategori adı giriniz" />
+        <span asp-validation-for="CategoryName" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Kaydet</button>
+    <a href="/Category/CategoryList" class="btn btn-secondary">İptal</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

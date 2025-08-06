@@ -24,6 +24,7 @@ builder.Services.AddScoped<IUserService,UserManager>();
 builder.Services.AddScoped<IReportService, ReportManager>();
 
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

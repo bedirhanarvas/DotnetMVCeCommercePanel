@@ -1,0 +1,35 @@
+﻿@model List<eCommercePanel.DAL.DTOs.CategoryDTOs.Response.GetAllCategoriesDto>
+
+@{
+    ViewData["Title"] = "Kategori Listesi";
+}
+
+<h2 class="mb-4">Kategori Listesi</h2>
+
+<a href="@Url.Action("CategoryAdd", "Category")" class="btn btn-success mb-3">+ Yeni Kategori</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Kategori Adı</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>@category.Id</td>
+                <td>@category.CategoryName</td>
+                <td>
+                    <a class="btn btn-sm btn-primary" href="@Url.Action("CategoryEdit", "Category", new { id = category.Id })">Düzenle</a>
+                    <a class="btn btn-sm btn-info" href="@Url.Action("CategoryDetail", "Category", new { id = category.Id })">Detay</a>
+                    <a class="btn btn-sm btn-danger" href="@Url.Action("CategoryDelete", "Category", new { id = category.Id })">
+                        Sil
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

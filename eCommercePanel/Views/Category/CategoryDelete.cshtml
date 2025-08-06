@@ -1,0 +1,25 @@
+﻿@model eCommercePanel.DAL.DTOs.CategoryDTOs.Response.CategoryDetailDto
+
+@{
+    ViewData["Title"] = "Kategori Sil";
+}
+
+<h2>Kategori Sil</h2>
+
+<div class="alert alert-warning">
+    Bu kategoriyi silmek üzeresiniz. Devam etmek istiyor musunuz?
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">@Model.CategoryName</h5>
+        <p>@Model.Description</p>
+    </div>
+</div>
+
+<form asp-action="CategoryDeleteConfirmed" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button type="submit" class="btn btn-danger">Evet, Sil</button>
+    <a href="@Url.Action("CategoryList", "Category")" class="btn btn-secondary">Vazgeç</a>
+</form>
