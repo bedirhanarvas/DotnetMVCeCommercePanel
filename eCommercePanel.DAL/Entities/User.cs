@@ -33,6 +33,10 @@ public class User
     [Required]
     [DataType(DataType.Date)]
     public DateTime UpdatedAt { get; set; }
+
+    public int RoleId { get; set; }
+    public Role Role { get; set; } = new();
+
     public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }

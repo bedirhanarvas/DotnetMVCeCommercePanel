@@ -2,6 +2,7 @@
 using eCommercePanel.BLL.Services;
 using eCommercePanel.DAL.DTOs.ProductDTOs.Requests;
 using eCommercePanel.DAL.DTOs.ProductDTOs.Responses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -20,6 +21,7 @@ public class ProductController: Controller
     }
 
 
+    [Authorize]
     [HttpGet]
     public async Task<IActionResult> ProductList()
     {
@@ -92,7 +94,8 @@ public class ProductController: Controller
         return RedirectToAction("ProductList");
     }
 
-    [HttpPost]
+    [HttpPost("/Product/ProductDelete/{id}")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> ProductDelete(int id)
     {
         var result = await _productService.DeleteAsync(id);
@@ -112,7 +115,7 @@ public class ProductController: Controller
 
         if (!result.Success || result.Data == null)
         {
-            return RedirectToAction("ProductList");
+            return NotFound();
         }
 
         // Mapping: ProductDetailDto → ProductUpdateDto (manuel yapılabilir)
@@ -124,7 +127,7 @@ public class ProductController: Controller
             Description = result.Data.Description,
         };
 
-        return View(updateDto);
+        return PartialView("ProductEdit", updateDto);
     }
 
     [HttpPost]

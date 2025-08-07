@@ -1,9 +1,12 @@
+using eCommercePanel.BLL.Authentication.Abstracts;
+using eCommercePanel.BLL.Authentication.Concretes;
 using eCommercePanel.BLL.Managers;
 using eCommercePanel.BLL.Services;
+using eCommercePanel.DAL.Context;
 using eCommercePanel.DAL.Interfaces;
 using eCommercePanel.DAL.Repositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using eCommercePanel.DAL.Context;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +14,14 @@ string conn = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(conn));
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+       .AddCookie(options =>
+       {
+           options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+           options.Cookie.Name = "LoginCookie";
+           options.LoginPath = "/account-login";
+           options.AccessDeniedPath = "/account-login";
+       });
 
 
 // Add services to the container.
@@ -22,7 +33,8 @@ builder.Services.AddScoped<ICategoryService,CategoryManager>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService,UserManager>();
 builder.Services.AddScoped<IReportService, ReportManager>();
-
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 
 var app = builder.Build();
@@ -42,8 +54,9 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=User}/{action=Login}/{id?}");
+    pattern: "{controller=Dashboard}/{action=Index}/{id?}");
 
 app.Run();

@@ -11,12 +11,6 @@ public class Order
     public int Id { get; set; }
 
     [Required]
-    public int UserId { get; set; }
-
-    [Required]
-    public int AddressId { get; set; }
-
-    [Required]
     [DataType(DataType.Date)]
     public DateTime OrderDate { get; set; }
 
@@ -24,16 +18,18 @@ public class Order
     [Column(TypeName = "decimal(18,2)")]
     public decimal TotalAmount { get; set; }
 
-
     [Required]
     [MaxLength(50)]
     public string Status { get; set; } = "Hazırlanıyor";
+    
+    [Required]
+    public int UserId { get; set; }
+    public virtual User User { get; set; } = new();
 
-    [ForeignKey("UserId")]
-    public virtual User User { get; set; }
-
-    [ForeignKey("AddressId")]
+    [Required]
+    public int AddressId { get; set; }
     public virtual Address? Address { get; set; }
+
     public virtual ICollection<OrderItem> OrderItems { get; set; }= new List<OrderItem>();
     
 

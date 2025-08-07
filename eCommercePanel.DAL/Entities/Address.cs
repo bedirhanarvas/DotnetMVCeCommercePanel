@@ -15,8 +15,6 @@ namespace eCommercePanel.DAL.Entities;
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
-    [Required]
-    public int UserId { get; set; }
 
     [Required]
     [StringLength(250)]
@@ -35,7 +33,8 @@ namespace eCommercePanel.DAL.Entities;
     public string? Country { get; set; }
 
 
-    [ForeignKey("UserId")]
+    [Required]
+    public int UserId { get; set; }
     public virtual User? User { get; set; }
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();

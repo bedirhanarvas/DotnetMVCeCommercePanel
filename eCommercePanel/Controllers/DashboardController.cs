@@ -1,6 +1,7 @@
 ﻿using eCommercePanel.BLL.Services;
 using eCommercePanel.DAL.DTOs.ProductDTOs.Responses;
 using eCommercePanel.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,7 @@ public class DashboardController : Controller
         _productService = productService;
     }
 
+    [Authorize]
     public async Task<IActionResult> Index()
     {
         var topProduct = await _reportService.GetTopSellingProductAsync();
@@ -49,7 +51,7 @@ public class DashboardController : Controller
 
         return View(viewModel);
     }
-
+     [Authorize]
     public async Task<IActionResult> PreparingOrders()
     {
         var orders = await _reportService.GetPreparingOrdersAsync();

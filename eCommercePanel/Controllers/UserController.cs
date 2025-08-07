@@ -1,7 +1,13 @@
-﻿using eCommercePanel.BLL.Services;
+﻿using eCommercePanel.BLL.Authentication.Abstracts;
+using eCommercePanel.BLL.Services;
 using eCommercePanel.DAL.DTOs.UserDTOs.Requets;
 using eCommercePanel.DAL.DTOs.UserDTOs.Responses;
+using eCommercePanel.DAL.Entities;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace eCommercePanel.Controllers;
 
@@ -9,11 +15,13 @@ public class UserController : Controller
 {
     private readonly IUserService _userService;
     private readonly IReportService _reportService;
+    private readonly IAuthService _authService;
 
-    public UserController(IUserService userService, IReportService reportService)
+    public UserController(IUserService userService, IReportService reportService, IAuthService authService)
     {
         _userService = userService;
         _reportService = reportService;
+        _authService = authService;
     }
 
     [HttpGet]
@@ -29,15 +37,21 @@ public class UserController : Controller
 
         return View(result.Data);
     }
-    /// <summary>
-    /// bu endpoint ve fonksiyon kullancıı detayşatıı getirir
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
+ 
     [HttpGet]
-    public async Task<IActionResult> UserDetail(int id)
+    public async Task<IActionResult> UserDetail()
     {
-        var result = await _userService.GetByIdAsync(id);
+        var userIdClaim = _authService.GetClaimsUserInfoAsync();
+
+        if (userIdClaim.Id == null)
+        {
+            TempData["Error"] = "Giriş yapan kullanıcı bilgisi alınamadı.";
+            return RedirectToAction("Login"); // Gerekirse login sayfasına yönlendir
+        }
+
+        var result = await _userService.GetByIdAsync(userIdClaim.Id);
+
+        //var result = await _userService.GetByIdAsync(id);
 
         if (!result.Success || result.Data == null)
         {
@@ -75,15 +89,16 @@ public class UserController : Controller
 
     
     [HttpGet]
-    public async Task<IActionResult> UserDelete(int id)
+    public async Task<IActionResult> UserDelete()
     {
-        var result = await _userService.DeleteAsync(id);
+        var userIdClaim = _authService.GetClaimsUserInfoAsync();
 
-        if (!result.Success)
+        if (userIdClaim.Id == null)
         {
-            TempData["Error"] = result.Message;
-            return RedirectToAction("Login");
+            TempData["Error"] = "Giriş yapan kullanıcı bilgisi alınamadı.";
+            return RedirectToAction("Login"); // Gerekirse login sayfasına yönlendir
         }
+        await _userService.DeleteAsync(userIdClaim.Id);
         
         return RedirectToAction("Login");
     }
@@ -155,13 +170,14 @@ public class UserController : Controller
         return RedirectToAction("Login");
     }
 
-    [HttpGet]
+    [HttpGet("/account-login")]
     public async Task<IActionResult> Login()
     {
         return View();
     }
 
-    [HttpPost]
+    [HttpPost("/account-login")]
+  
     public async Task<IActionResult> Login(UserLoginDto userLoginDto)
     {
         if (!ModelState.IsValid)
@@ -174,17 +190,27 @@ public class UserController : Controller
             return View(userLoginDto);
         }
 
-        //HttpContext.Session.SetString("Email", result.Data.Email);
+        var newClaim = new[]
+               {
+                    new Claim("UserId", result.Data.Id.ToString()),
+                    new Claim("NameSurname", result.Data.FirstName + " " + result.Data.LastName),
+                    new Claim("Email", result.Data.Email),
+                };
+
+
+
+        bool check = await _authService.AddClaimAsync(newClaim);
+
         TempData["Welcome"] = $"Hoş geldin, {result.Data.FirstName}!";
 
         return RedirectToAction("Index", "Dashboard");
     }
 
+    [AllowAnonymous]
     [HttpGet]
-    public IActionResult Logout()
+    public async Task<IActionResult> Logout()
     {
-       
-        TempData["Logout"] = "Başarıyla çıkış yaptınız.";
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         return RedirectToAction("Login", "User");
     }
 

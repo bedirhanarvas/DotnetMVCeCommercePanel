@@ -31,13 +31,13 @@ public class Product
     [Range(0, int.MaxValue, ErrorMessage = "Stok negatif olamaz.")]
     public int Stock { get; set; }
 
-    [Required(ErrorMessage = "Kategori seçimi zorunludur.")]
-    public int CategoryId { get; set; }
 
     [StringLength(300, ErrorMessage = "Resim yolu en fazla 300 karakter olabilir.")]
     public string ImageUrl { get; set; }
 
-    [ForeignKey("CategoryId")]
+    
+    [Required(ErrorMessage = "Kategori seçimi zorunludur.")]
+    public int CategoryId { get; set; }
     public virtual Category? Category { get; set; }
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 

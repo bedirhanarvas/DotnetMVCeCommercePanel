@@ -50,6 +50,7 @@ public class ProductManager : IProductService
         var products = await _productRepository.GetAllAsync();
         var productDto = products.Select(p => new GetAllProductsDto
         {
+            Id = p.Id,
             ProductName = p.ProductName,
             Description = p.Description,
             Price = p.Price,
