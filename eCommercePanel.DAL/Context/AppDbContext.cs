@@ -22,17 +22,30 @@ public class AppDbContext : DbContext
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
     public DbSet<Product> Products { get; set; }
-    public DbSet<Role> Roles { get; set; }  
+    public DbSet<Role> Roles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
+        
+
+        modelBuilder.Entity<Role>()
+        .HasIndex(r => r.RoleType)
+        .IsUnique(); // Aynı RoleType tekrar eklenmesini engeller
+
         // User - Role İlişkisi
         modelBuilder.Entity<User>()
             .HasOne(u => u.Role)
             .WithMany(r => r.Users)
-            .HasForeignKey(u => u.RoleId);
+            .HasForeignKey(u => u.RoleId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Sadece 2 rol ekle (Id sabit)
+        modelBuilder.Entity<Role>().HasData(
+            new Role { Id = 1, RoleType = "Customer" },
+            new Role { Id = 2, RoleType = "Admin" }
+        );
 
         // Order - OrderItem ilişkisi
         modelBuilder.Entity<OrderItem>()
@@ -43,7 +56,7 @@ public class AppDbContext : DbContext
         // OrderItem - Product ilişkisi
         modelBuilder.Entity<OrderItem>()
             .HasOne(oi => oi.Product)
-            .WithMany()
+            .WithMany(p => p.OrderItems) // Product sınıfında OrderItems koleksiyonu var
             .HasForeignKey(oi => oi.ProductId);
 
         // User - Address ilişkisi
@@ -63,22 +76,22 @@ public class AppDbContext : DbContext
             .HasOne(o => o.User)
             .WithMany(u => u.Orders)
             .HasForeignKey(o => o.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Restrict); // Döngüsel silme sorununu engellemek için
 
         // Order - Address ilişkisi
         modelBuilder.Entity<Order>()
             .HasOne(o => o.Address)
-            .WithMany() // Eğer Address → Order ilişkisi yoksa WithMany boş kalabilir
+            .WithMany(a => a.Orders)
             .HasForeignKey(o => o.AddressId)
-            .OnDelete(DeleteBehavior.Restrict);
-
+            .OnDelete(DeleteBehavior.Restrict); // Döngüsel silme sorununu engellemek için
     }
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
         {
-            optionsBuilder.UseSqlServer("Server=.;Database=test;Trusted_Connection=True;TrustServerCertificate=True;");
+            optionsBuilder.UseSqlServer("Server=.;Database=testFaruk;Trusted_Connection=True;TrustServerCertificate=True;");
         }
     }
 

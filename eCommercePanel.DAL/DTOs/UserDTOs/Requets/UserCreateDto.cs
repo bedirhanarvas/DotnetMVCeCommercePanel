@@ -1,4 +1,5 @@
-﻿using System;
+﻿using eCommercePanel.DAL.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -17,6 +18,7 @@ public class UserCreateDto
     [EmailAddress(ErrorMessage = "Geçerli bir email giriniz.")]
     public string Email { get; set; }
     public string Password { get; set; }
+    public int RoleId { get; set; } = 1;
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 
 }

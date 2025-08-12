@@ -34,6 +34,10 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService,UserManager>();
 builder.Services.AddScoped<IReportService, ReportManager>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderService, OrderManager>();
+builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+builder.Services.AddScoped<IAddressService, AddressManager>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 

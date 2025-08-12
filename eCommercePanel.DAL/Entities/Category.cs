@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eCommercePanel.DAL.Entities;
 
@@ -22,5 +17,5 @@ public class Category
     [StringLength(500, ErrorMessage = "Açıklama en fazla 500 karakter olabilir.")]
     public string? Description { get; set; }
     public bool IsActive { get; set; } = true;
-    public virtual ICollection<Product> Products { get; set; }= new List<Product>();
+    public ICollection<Product> Products { get; set; } = new List<Product>();
 }

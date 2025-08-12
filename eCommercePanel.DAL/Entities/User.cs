@@ -35,8 +35,8 @@ public class User
     public DateTime UpdatedAt { get; set; }
 
     public int RoleId { get; set; }
-    public Role Role { get; set; } = new();
+    public Role Role { get; set; }
 
-    public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    public ICollection<Address> Addresses { get; set; } = new List<Address>();
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
 }

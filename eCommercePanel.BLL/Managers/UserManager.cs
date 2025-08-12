@@ -35,6 +35,7 @@ public class UserManager : IUserService
             LastName = userCreateDto.LastName,
             Email = userCreateDto.Email,
             Password = Hash(userCreateDto.Password),
+            RoleId = userCreateDto.RoleId,
             CreatedAt = userCreateDto.CreatedAt
         };
         

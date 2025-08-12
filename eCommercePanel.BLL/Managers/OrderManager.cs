@@ -1,8 +1,8 @@
 ﻿using eCommercePanel.BLL.Results;
 using eCommercePanel.BLL.Services;
-using eCommercePanel.DAL.DTOs.Address.Responses;
 using eCommercePanel.DAL.DTOs.AddressDTOs.Requests;
 using eCommercePanel.DAL.DTOs.OrderDTOs.Requests;
+using eCommercePanel.DAL.DTOs.OrderDTOs.Responses;
 using eCommercePanel.DAL.Entities;
 using eCommercePanel.DAL.Interfaces;
 
@@ -64,11 +64,18 @@ public class OrderManager : IOrderService
 
         var orderDto = orders.Select(o => new AllOrdersDto
         {
+            OrderId = o.Id,
             UserId = o.UserId,
+            UserFullName = o.User != null ? o.User.FirstName + " " + o.User.LastName : "Bilinmiyor", // Null kontrolü
             AddressId = o.AddressId,
             OrderDate = o.OrderDate,
             TotalAmount = o.TotalAmount,
             Status = o.Status,
+            OrderItems = o.OrderItems != null ? o.OrderItems.Select(oi => new OrderItemDto
+            {
+                ProductName = oi.Product?.ProductName ?? "Ürün Bilgisi Yok", // Null kontrolü
+                Quantity = oi.Quantity
+            }).ToList() : new List<OrderItemDto>() // Null kontrolü
         }).ToList();
 
         return new SuccessDataResult<List<AllOrdersDto>>(orderDto);

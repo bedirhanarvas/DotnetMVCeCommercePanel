@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eCommercePanel.DAL.DTOs.Address.Responses;
+namespace eCommercePanel.DAL.DTOs.OrderDTOs.Responses;
 
 public class OrderDetailDto
 {

@@ -1,0 +1,93 @@
+﻿@model List<eCommercePanel.DAL.DTOs.OrderDTOs.Responses.AllOrdersDto>
+
+@{
+    ViewData["Title"] = "Sipariş Listesi";
+}
+
+<h1 class="mb-4">Sipariş Listesi</h1>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">
+        Henüz sipariş bulunmamaktadır.
+    </div>
+}
+else
+{
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Kullanıcı</th>
+                <th>Sipariş Tarihi</th>
+                <th>Toplam Tutar</th>
+                <th>Durum</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.UserFullName</td>
+                    <td>@order.OrderDate.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@order.TotalAmount.ToString("C2")</td>
+                    <td>@order.Status</td>
+                    <td>
+                        <a href="@Url.Action("OrderDetail", "Order", new { id = order.OrderId })" class="btn btn-sm btn-info">
+                            <i class="fa fa-eye"></i> Detay
+                        </a>
+                        <a href="@Url.Action("OrderEdit", "Order", new { id = order.OrderId })" class="btn btn-sm btn-warning">
+                            <i class="fa fa-edit"></i> Düzenle
+                        </a>
+                        <a href="@Url.Action("OrderDelete", "Order", new { id = order.OrderId })"
+                           class="btn btn-sm btn-danger"
+                           onclick="return confirm('Bu siparişi silmek istediğinize emin misiniz?');">
+                            <i class="fa fa-trash"></i> Sil
+                        </a>
+                        <!-- Ürünler için modal tetikleyici buton -->
+                        <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#productsModal_@order.OrderId">
+                            Ürünleri Görüntüle
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Modal Template: Her sipariş için benzersiz ID -->
+    @foreach (var order in Model)
+    {
+        <div class="modal fade" id="productsModal_@order.OrderId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Sipariş Ürünleri - @order.UserFullName</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-unstyled">
+                            @foreach (var item in order.OrderItems)
+                            {
+                                <li>
+                                    <strong>@item.ProductName</strong> (x@item.Quantity) - @item.Quantity.ToString("C2")
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}

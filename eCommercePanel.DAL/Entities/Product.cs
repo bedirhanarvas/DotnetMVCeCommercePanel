@@ -36,10 +36,9 @@ public class Product
     public string ImageUrl { get; set; }
 
     
-    [Required(ErrorMessage = "Kategori seçimi zorunludur.")]
     public int CategoryId { get; set; }
-    public virtual Category? Category { get; set; }
-    public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+    public Category Category { get; set; }
+    public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
 
 

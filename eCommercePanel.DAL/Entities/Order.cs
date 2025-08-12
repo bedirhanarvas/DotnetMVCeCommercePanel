@@ -21,16 +21,15 @@ public class Order
     [Required]
     [MaxLength(50)]
     public string Status { get; set; } = "Hazırlanıyor";
-    
-    [Required]
+
+    [ForeignKey("UserId")]
     public int UserId { get; set; }
-    public virtual User User { get; set; } = new();
+    public User User { get; set; }
 
-    [Required]
     public int AddressId { get; set; }
-    public virtual Address? Address { get; set; }
+    public Address Address { get; set; }
 
-    public virtual ICollection<OrderItem> OrderItems { get; set; }= new List<OrderItem>();
+    public ICollection<OrderItem> OrderItems { get; set; }= new List<OrderItem>();
     
 
 }

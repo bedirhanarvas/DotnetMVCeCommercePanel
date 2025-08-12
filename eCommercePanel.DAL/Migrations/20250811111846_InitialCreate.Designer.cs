@@ -12,7 +12,7 @@ using eCommercePanel.DAL.Context;
 namespace eCommercePanel.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250728065842_InitialCreate")]
+    [Migration("20250811111846_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -99,9 +99,6 @@ namespace eCommercePanel.DAL.Migrations
                     b.Property<int>("AddressId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AddressId1")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
@@ -119,8 +116,6 @@ namespace eCommercePanel.DAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
-
-                    b.HasIndex("AddressId1");
 
                     b.HasIndex("UserId");
 
@@ -141,9 +136,6 @@ namespace eCommercePanel.DAL.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProductId1")
-                        .HasColumnType("int");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -155,8 +147,6 @@ namespace eCommercePanel.DAL.Migrations
                     b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("ProductId1");
 
                     b.ToTable("OrderItems");
                 });
@@ -199,6 +189,38 @@ namespace eCommercePanel.DAL.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("eCommercePanel.DAL.Entities.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("RoleType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleType")
+                        .IsUnique();
+
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            RoleType = "Customer"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            RoleType = "Admin"
+                        });
+                });
+
             modelBuilder.Entity("eCommercePanel.DAL.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -228,10 +250,15 @@ namespace eCommercePanel.DAL.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("Users");
                 });
@@ -250,14 +277,10 @@ namespace eCommercePanel.DAL.Migrations
             modelBuilder.Entity("eCommercePanel.DAL.Entities.Order", b =>
                 {
                     b.HasOne("eCommercePanel.DAL.Entities.Address", "Address")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("AddressId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("eCommercePanel.DAL.Entities.Address", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("AddressId1");
 
                     b.HasOne("eCommercePanel.DAL.Entities.User", "User")
                         .WithMany("Orders")
@@ -279,14 +302,10 @@ namespace eCommercePanel.DAL.Migrations
                         .IsRequired();
 
                     b.HasOne("eCommercePanel.DAL.Entities.Product", "Product")
-                        .WithMany()
+                        .WithMany("OrderItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("eCommercePanel.DAL.Entities.Product", null)
-                        .WithMany("OrderItems")
-                        .HasForeignKey("ProductId1");
 
                     b.Navigation("Order");
 
@@ -302,6 +321,17 @@ namespace eCommercePanel.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("eCommercePanel.DAL.Entities.User", b =>
+                {
+                    b.HasOne("eCommercePanel.DAL.Entities.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("eCommercePanel.DAL.Entities.Address", b =>
@@ -322,6 +352,11 @@ namespace eCommercePanel.DAL.Migrations
             modelBuilder.Entity("eCommercePanel.DAL.Entities.Product", b =>
                 {
                     b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("eCommercePanel.DAL.Entities.Role", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("eCommercePanel.DAL.Entities.User", b =>

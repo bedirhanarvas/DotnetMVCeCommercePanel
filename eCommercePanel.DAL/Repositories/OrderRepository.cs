@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace eCommercePanel.DAL.Repositories;
 
-internal class OrderRepository:IOrderRepository
+public class OrderRepository:IOrderRepository
 {
     private readonly AppDbContext _context;
     private readonly DbSet<Order> _orders;
@@ -21,7 +21,7 @@ internal class OrderRepository:IOrderRepository
         _orders = context.Set<Order>();
     }
 
-    public async Task<List<Order>> GetAllAsync() => await _orders.ToListAsync();
+    public async Task<List<Order>> GetAllAsync() => await _orders.Include(x=> x.User).ToListAsync();
 
     public async Task<Order> GetByIdAsync(int id) => await _orders.FindAsync(id);
 

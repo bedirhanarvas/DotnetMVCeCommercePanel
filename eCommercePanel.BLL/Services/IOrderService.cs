@@ -1,7 +1,7 @@
 ﻿using eCommercePanel.BLL.Results;
-using eCommercePanel.DAL.DTOs.Address.Responses;
 using eCommercePanel.DAL.DTOs.AddressDTOs.Requests;
 using eCommercePanel.DAL.DTOs.OrderDTOs.Requests;
+using eCommercePanel.DAL.DTOs.OrderDTOs.Responses;
 
 namespace eCommercePanel.BLL.Services
 {

@@ -1,7 +1,7 @@
 ﻿using eCommercePanel.BLL.Services;
-using eCommercePanel.DAL.DTOs.Address.Responses;
 using eCommercePanel.DAL.DTOs.AddressDTOs.Requests;
 using eCommercePanel.DAL.DTOs.OrderDTOs.Requests;
+using eCommercePanel.DAL.DTOs.OrderDTOs.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eCommercePanel.Controllers;

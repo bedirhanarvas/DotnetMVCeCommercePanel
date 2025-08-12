@@ -193,15 +193,14 @@ public class UserController : Controller
         var newClaim = new[]
                {
                     new Claim("UserId", result.Data.Id.ToString()),
-                    new Claim("NameSurname", result.Data.FirstName + " " + result.Data.LastName),
                     new Claim("Email", result.Data.Email),
+                    new Claim("Name", result.Data.FirstName +" "+ result.Data.LastName),
+                    
                 };
-
 
 
         bool check = await _authService.AddClaimAsync(newClaim);
 
-        TempData["Welcome"] = $"Hoş geldin, {result.Data.FirstName}!";
 
         return RedirectToAction("Index", "Dashboard");
     }

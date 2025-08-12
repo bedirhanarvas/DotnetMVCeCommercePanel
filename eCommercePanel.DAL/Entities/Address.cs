@@ -35,7 +35,7 @@ namespace eCommercePanel.DAL.Entities;
 
     [Required]
     public int UserId { get; set; }
-    public virtual User? User { get; set; }
+    public User User { get; set; }
 
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
 }
